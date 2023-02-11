@@ -1,0 +1,105 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int        @id @default(autoincrement())
+  email          String     @unique
+  name           String?
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+  Favorite       Favorite[]
+  createdRecipes Recipe[]
+  History        History[]
+}
+
+model Recipe {
+  id          Int          @id @default(autoincrement())
+  title       String
+  description String?
+  complexity  Complexity
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  User        User?        @relation(fields: [userId], references: [id])
+  userId      Int?
+  Step        Step[]
+  Ingredient  Ingredient[]
+  Favorite    Favorite[]
+  Comment     Comment[]
+  Rating      Rating[]
+  Tag         Tag[]
+  History     History[]
+  Image       Image[]
+}
+
+model Tag {
+  id       Int     @id @default(autoincrement())
+  name     String
+  Recipe   Recipe? @relation(fields: [recipeId], references: [id])
+  recipeId Int?
+}
+
+model Comment {
+  id       Int     @id @default(autoincrement())
+  text     String
+  Recipe   Recipe? @relation(fields: [recipeId], references: [id])
+  recipeId Int?
+}
+
+model Rating {
+  id       Int     @id @default(autoincrement())
+  value    Int
+  Recipe   Recipe? @relation(fields: [recipeId], references: [id])
+  recipeId Int?
+}
+
+model Step {
+  id       Int     @id @default(autoincrement())
+  text     String
+  Recipe   Recipe? @relation(fields: [recipeId], references: [id])
+  recipeId Int?
+}
+
+model Ingredient {
+  id       Int     @id @default(autoincrement())
+  name     String
+  Recipe   Recipe? @relation(fields: [recipeId], references: [id])
+  recipeId Int?
+}
+
+model Favorite {
+  id       Int     @id @default(autoincrement())
+  User     User?   @relation(fields: [userId], references: [id])
+  userId   Int?
+  Recipe   Recipe? @relation(fields: [recipeId], references: [id])
+  recipeId Int?
+}
+
+model History {
+  id       Int     @id @default(autoincrement())
+  User     User?   @relation(fields: [userId], references: [id])
+  userId   Int?
+  Recipe   Recipe? @relation(fields: [recipeId], references: [id])
+  recipeId Int?
+}
+
+model Image {
+  id       Int     @id @default(autoincrement())
+  url      String
+  Recipe   Recipe? @relation(fields: [recipeId], references: [id])
+  recipeId Int?
+}
+
+enum Complexity {
+  Easy
+  Medium
+  Hard
+}
