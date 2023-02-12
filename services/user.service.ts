@@ -53,11 +53,4 @@ async function getAllUsers (): Promise<User[]> {
   return users
 }
 
-/* async function getUserWithFavs (id: number): Promise<User | null> {
-  const user = await getUserById(id)
-  const recipes = await recipesService.getRecipesByUserId(user.id)
-  const newUser = { ...user, recipes }
-  return newUser
-} */
-
 export { getUserById, getUserByEmail, createUser, updateUser, deleteUser, getAllUsers }
