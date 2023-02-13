@@ -127,6 +127,41 @@ async function getRecipesByHistory (userId: number): Promise<Recipe[]> {
   return recipes
 }
 
+async function createRecipe (recipe: Recipe): Promise<Recipe> {
+  const newRecipe = await prisma.recipe.create({
+    data: {
+      ...recipe
+    }
+  })
+  return newRecipe
+}
+
+async function updateRecipe (recipe: Recipe): Promise<Recipe> {
+  const updatedRecipe = await prisma.recipe.update({
+    where: {
+      id: recipe.id
+    },
+    data: {
+      ...recipe
+    }
+  })
+  return updatedRecipe
+}
+
+async function deleteRecipe (id: number): Promise<Recipe> {
+  const deletedRecipe = await prisma.recipe.delete({
+    where: {
+      id
+    }
+  })
+  return deletedRecipe
+}
+
+async function getAllRecipes (): Promise<Recipe[]> {
+  const recipes = await prisma.recipe.findMany()
+  return recipes
+}
+
 export {
   getRecipesOwnedByUserId,
   getRecipesFavoritedByUserId,
@@ -137,5 +172,9 @@ export {
   getRecipesByTags,
   getRecipesByIngredients,
   getRecipesByRating,
-  getRecipesByHistory
+  getRecipesByHistory,
+  createRecipe,
+  updateRecipe,
+  deleteRecipe,
+  getAllRecipes
 }
