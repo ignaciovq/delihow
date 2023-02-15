@@ -1,5 +1,5 @@
 import { prisma } from '@/prisma/prismaClient'
-import type { Recipe } from '@/prisma/generated/client'
+import type { Recipe } from '.prisma/client'
 
 async function getRecipesOwnedByUserId (id: number): Promise<Recipe[]> {
   const recipes = await prisma.recipe.findMany({
