@@ -127,10 +127,52 @@ async function getRecipesByHistory (userId: number): Promise<Recipe[]> {
   return recipes
 }
 
-async function createRecipe (recipe: Recipe): Promise<Recipe> {
+async function createRecipe (recipe: any): Promise<Recipe> {
   const newRecipe = await prisma.recipe.create({
     data: {
-      ...recipe
+      title: recipe.title,
+      description: recipe.description,
+      complexity: recipe.complexity,
+      Steps: recipe.steps,
+      Creator: {
+        connect: {
+          id: recipe.creatorId
+        }
+      },
+      prepTime: recipe.prepTime,
+      Image: {
+        create: [
+          recipe.images.map((image: string) => {
+            return {
+              url: image
+            }
+          })
+        ]
+      },
+      Ingredients: {
+        connectOrCreate: recipe.ingredients.map((ingredient: string) => {
+          return {
+            create: {
+              name: ingredient
+            },
+            where: {
+              name: ingredient
+            }
+          }
+        })
+      },
+      Tags: {
+        connectOrCreate: recipe.tags.map((tag: string) => {
+          return {
+            create: {
+              name: tag
+            },
+            where: {
+              name: tag
+            }
+          }
+        })
+      }
     }
   })
   return newRecipe

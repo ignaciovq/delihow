@@ -32,7 +32,7 @@ model Recipe {
   updatedAt      DateTime          @updatedAt
   Creator        User              @relation(fields: [userId], references: [id])
   userId         Int
-  Steps          Step[]
+  Steps          String
   Ingredients    Ingredient[]
   Comments       Comment[]
   Rating         Rating[]
@@ -78,16 +78,9 @@ model Rating {
   recipeId Int
 }
 
-model Step {
-  id       Int    @id @default(autoincrement())
-  text     String @db.LongText
-  Recipe   Recipe @relation(fields: [recipeId], references: [id])
-  recipeId Int
-}
-
 model Ingredient {
   id       Int     @id @default(autoincrement())
-  name     String  @db.VarChar(30)
+  name     String  @unique @db.VarChar(30)
   Recipe   Recipe? @relation(fields: [recipeId], references: [id])
   recipeId Int?
 }

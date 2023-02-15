@@ -9,6 +9,7 @@
     background-color: #343434;
     color: white;
     justify-content: space-between;
+    z-index: 5;
 }
 
 .main_section, .logo, .search {
@@ -95,7 +96,6 @@
 .discover > span::after{
     content: "";
     position: absolute;
-    top: 1.25rem;
     left: 6.5rem;
     width: .6rem;
     height: .6rem;
