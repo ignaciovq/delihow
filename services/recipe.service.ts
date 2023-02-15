@@ -70,10 +70,8 @@ async function getRecipesByTags (tags: string[]): Promise<Recipe[]> {
     where: {
       Tags: {
         some: {
-          Tag: {
-            name: {
-              in: tags
-            }
+          name: {
+            in: tags
           }
         }
       }
