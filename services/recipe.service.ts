@@ -1,5 +1,5 @@
 import { prisma } from '@/prisma/prismaClient'
-import type { Recipe, Complexity } from '@/prisma/generated/client'
+import type { Recipe } from '@/prisma/generated/client'
 
 async function getRecipesOwnedByUserId (id: number): Promise<Recipe[]> {
   const recipes = await prisma.recipe.findMany({
@@ -45,7 +45,7 @@ async function getRecipesByTitleContains (title: string): Promise<Recipe[]> {
   return recipes
 }
 
-async function getRecipesByComplexity (complexity: Complexity): Promise<Recipe[]> {
+async function getRecipesByComplexity (complexity: number): Promise<Recipe[]> {
   const recipes = await prisma.recipe.findMany({
     where: {
       complexity
@@ -141,13 +141,11 @@ async function createRecipe (recipe: any): Promise<Recipe> {
       },
       prepTime: recipe.prepTime,
       Image: {
-        create: [
-          recipe.images.map((image: string) => {
-            return {
-              url: image
-            }
-          })
-        ]
+        create: recipe.images.map((image: string) => {
+          return {
+            url: image
+          }
+        })
       },
       Ingredients: {
         connectOrCreate: recipe.ingredients.map((ingredient: string) => {

@@ -79,18 +79,20 @@ export default function RecipeCreator () {
           }
         }
       }
-      fetch('/api/recipes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          ...recipe,
-          img: imgs
+      setTimeout(() => {
+        fetch('/api/recipes', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            ...recipe,
+            img: imgs
+          })
+        }).then((res) => {
+          if (res.status === 200) { alert('Recipe created') }
         })
-      }).then((res) => {
-        if (res.status === 200) { alert('Recipe created') }
-      })
+      }, 1000)
     } else {
       alert('No image selected')
     }

@@ -3,7 +3,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "./generated/client"
 }
 
 datasource db {
@@ -26,7 +25,7 @@ model Recipe {
   id             Int               @id @default(autoincrement())
   title          String            @db.VarChar(50)
   description    String?           @db.VarChar(200)
-  complexity     Complexity
+  complexity     Int
   prepTime       Int
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
@@ -36,7 +35,7 @@ model Recipe {
   Ingredients    Ingredient[]
   Comments       Comment[]
   Rating         Rating[]
-  Tags           TagOnRecipe[]
+  Tags           Tag[]
   Image          Image[]
   FavoriteOfUser FavoriteRecipes[]
   RecipeHistory  RecipeHistory[]
@@ -51,17 +50,8 @@ model FavoriteRecipes {
 }
 
 model Tag {
-  id      Int           @id @default(autoincrement())
-  name    String        @db.VarChar(15)
-  Recipes TagOnRecipe[]
-}
-
-model TagOnRecipe {
-  id       Int    @id @default(autoincrement())
-  Tag      Tag    @relation(fields: [tagId], references: [id])
-  tagId    Int
-  Recipe   Recipe @relation(fields: [recipeId], references: [id])
-  recipeId Int
+  name    String   @id @unique @db.VarChar(15)
+  Recipes Recipe[]
 }
 
 model Comment {
@@ -102,13 +92,7 @@ model RecipeHistory {
 
 model Image {
   id       Int    @id @default(autoincrement())
-  url      String @db.VarChar(50)
+  url      String @db.VarChar(100)
   Recipe   Recipe @relation(fields: [recipeId], references: [id])
   recipeId Int
-}
-
-enum Complexity {
-  Easy
-  Medium
-  Hard
 }

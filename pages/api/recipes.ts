@@ -45,11 +45,13 @@ async function onPost (req: NextApiRequest, res: NextApiResponse) { // TODO: val
   const recipe = await createRecipe({
     title,
     description,
-    prepTime,
-    complexity,
+    prepTime: parseInt(prepTime),
+    complexity: parseInt(complexity),
     steps,
-    ingredients,
-    images: image?.map((i) => ({ url: i.secure_url }))
+    ingredients: [ingredients.split('y')[1].trim(), ...ingredients.split('y')[0].trim().split(',')],
+    images: image?.map((i) => i.secure_url),
+    tags: ['tag1', 'tag2', 'tag3'],
+    creatorId: 1
   })
   res.status(200).json(recipe)
 }
