@@ -13,16 +13,17 @@ type fullRecipe = {
     ingredients: string[],
     tags: string[]
 }
+const include = {
+  Creator: true,
+  Image: true,
+  Ingredients: true,
+  Tags: true,
+  Rating: true
+}
 
 async function getRecipesOwnedByUserId (id: number): Promise<Recipe[]> {
   const recipes = await prisma.recipe.findMany({
-    include: {
-      Creator: true,
-      Image: true,
-      Ingredients: true,
-      Tags: true,
-      Rating: true
-    },
+    include,
     where: {
       Creator: {
         id
@@ -34,13 +35,7 @@ async function getRecipesOwnedByUserId (id: number): Promise<Recipe[]> {
 
 async function getRecipesFavoritedByUserId (id: number): Promise<Recipe[]> {
   const recipes = await prisma.recipe.findMany({
-    include: {
-      Creator: true,
-      Image: true,
-      Ingredients: true,
-      Tags: true,
-      Rating: true
-    },
+    include,
     where: {
       FavoriteOfUser: {
         some: {
@@ -54,13 +49,7 @@ async function getRecipesFavoritedByUserId (id: number): Promise<Recipe[]> {
 
 async function getRecipesById (id: number): Promise<Recipe | null> {
   const recipe = await prisma.recipe.findUnique({
-    include: {
-      Creator: true,
-      Image: true,
-      Ingredients: true,
-      Tags: true,
-      Rating: true
-    },
+    include,
     where: {
       id
     }
@@ -70,13 +59,7 @@ async function getRecipesById (id: number): Promise<Recipe | null> {
 
 async function getRecipesByTitleContains (title: string): Promise<Recipe[]> {
   const recipes = await prisma.recipe.findMany({
-    include: {
-      Creator: true,
-      Image: true,
-      Ingredients: true,
-      Tags: true,
-      Rating: true
-    },
+    include,
     where: {
       title: {
         contains: title
@@ -88,13 +71,7 @@ async function getRecipesByTitleContains (title: string): Promise<Recipe[]> {
 
 async function getRecipesByComplexity (complexity: number): Promise<Recipe[]> {
   const recipes = await prisma.recipe.findMany({
-    include: {
-      Creator: true,
-      Image: true,
-      Ingredients: true,
-      Tags: true,
-      Rating: true
-    },
+    include,
     where: {
       complexity
     }
@@ -104,13 +81,7 @@ async function getRecipesByComplexity (complexity: number): Promise<Recipe[]> {
 
 async function getRecipesByPrepTime (prepTime: number): Promise<Recipe[]> {
   const recipes = await prisma.recipe.findMany({
-    include: {
-      Creator: true,
-      Image: true,
-      Ingredients: true,
-      Tags: true,
-      Rating: true
-    },
+    include,
     where: {
       prepTime: {
         lte: prepTime
@@ -122,13 +93,7 @@ async function getRecipesByPrepTime (prepTime: number): Promise<Recipe[]> {
 
 async function getRecipesByTags (tags: string[]): Promise<Recipe[]> {
   const recipes = await prisma.recipe.findMany({
-    include: {
-      Creator: true,
-      Image: true,
-      Ingredients: true,
-      Tags: true,
-      Rating: true
-    },
+    include,
     where: {
       Tags: {
         some: {
@@ -144,13 +109,7 @@ async function getRecipesByTags (tags: string[]): Promise<Recipe[]> {
 
 async function getRecipesByIngredients (ingredients: string[]): Promise<Recipe[]> {
   const recipes = await prisma.recipe.findMany({
-    include: {
-      Creator: true,
-      Image: true,
-      Ingredients: true,
-      Tags: true,
-      Rating: true
-    },
+    include,
     where: {
       Ingredients: {
         some: {
@@ -166,13 +125,7 @@ async function getRecipesByIngredients (ingredients: string[]): Promise<Recipe[]
 
 async function getRecipesByRating (rating: number): Promise<Recipe[]> {
   const recipes = await prisma.recipe.findMany({
-    include: {
-      Creator: true,
-      Image: true,
-      Ingredients: true,
-      Tags: true,
-      Rating: true
-    },
+    include,
     where: {
       Rating: {
         some: {
@@ -188,13 +141,7 @@ async function getRecipesByRating (rating: number): Promise<Recipe[]> {
 
 async function getRecipesByHistory (userId: number): Promise<Recipe[]> {
   const recipes = await prisma.recipe.findMany({
-    include: {
-      Creator: true,
-      Image: true,
-      Ingredients: true,
-      Tags: true,
-      Rating: true
-    },
+    include,
     where: {
       RecipeHistory: {
         some: {
@@ -320,13 +267,7 @@ async function deleteRecipe (id: number): Promise<Recipe> {
 
 async function getAllRecipes (): Promise<Recipe[]> {
   const recipes = await prisma.recipe.findMany({
-    include: {
-      Creator: true,
-      Image: true,
-      Ingredients: true,
-      Tags: true,
-      Rating: true
-    }
+    include
   })
   return recipes
 }
