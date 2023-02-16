@@ -30,26 +30,25 @@ async function onGet (req: NextApiRequest, res: NextApiResponse) {
 async function onPost (req: NextApiRequest, res: NextApiResponse) { // TODO: validate image before uploading to cloudinary
   let image
   const { title, description, prepTime, complexity, steps, ingredients, img } = req.body
-  if (img && img.length > 0) {
-    if (img instanceof Array) {
-      image = await Promise.all(
-        img.map(async (i) => {
-          return await cloudinary.v2.uploader.upload(i)
-        })
-      )
-    }
+  if (img && img.length > 0 && img instanceof Array) {
+    image = await Promise.all(
+      img.map(async (i) => {
+        return await cloudinary.v2.uploader.upload(i)
+      })
+    )
   } else {
     res.status(400).json({ message: 'Image is required' })
     return
   }
+  const ingre = ingredients.replace(' y ', ',').split(',').map((i: string) => i.trim())
   const recipe = await createRecipe({
     title,
     description,
     prepTime: parseInt(prepTime),
     complexity: parseInt(complexity),
     steps,
-    ingredients: [ingredients.split('y')[1].trim(), ...ingredients.split('y')[0].trim().split(',')],
-    images: image?.map((i) => i.secure_url),
+    ingredients: ingre,
+    images: image.map((i) => i.secure_url),
     tags: ['tag1', 'tag2', 'tag3'],
     creatorId: 1
   })
