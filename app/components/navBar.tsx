@@ -15,7 +15,7 @@ const poppins = Poppins({
   subsets: ['latin']
 })
 
-export const Navbar = () => {
+export const NavBar = () => {
   return (
     <nav id={styles.navbar} className='flex_row'>
       <div className={styles.main_section}>
@@ -46,4 +46,4 @@ export const Navbar = () => {
   )
 }
 
-export default Navbar
+export default NavBar
