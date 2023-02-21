@@ -22,8 +22,11 @@ export default function handler (
 }
 
 async function onGet () {
-  const recipes = await getAllRecipes()
-  return { status: 200, response: recipes }
+  return getAllRecipes().then((recipes) => {
+    return { status: 200, response: recipes }
+  }).catch((err) => {
+    return { status: 500, response: err }
+  })
 }
 
 async function onPost (body) { // TODO: validate image before uploading to cloudinary ✅
