@@ -1,11 +1,41 @@
 import { prisma } from '@/prisma/prismaClient'
-import type { User } from '.prisma/client'
 
+type User = {
+    id: number,
+    username: string | null,
+    password: string | null,
+    name: string | null,
+    email: string | null,
+    image: string | null
+}
+
+const select = {
+  id: true,
+  username: true,
+  password: true,
+  name: true,
+  email: true,
+  image: true
+
+}
+async function getUserByUsernameAndPassword (username: string, password: string): Promise<User | null> {
+  const user = await prisma.user.findUnique({
+    where: {
+      username
+    },
+    select
+  })
+  if (user && user.password === password) {
+    return user
+  }
+  return null
+}
 async function getUserById (id: number): Promise<User | null> {
   const user = await prisma.user.findUnique({
     where: {
       id
-    }
+    },
+    select
   })
   return user
 }
@@ -13,7 +43,8 @@ async function getUserByEmail (email: string): Promise<User | null> {
   const user = await prisma.user.findUnique({
     where: {
       email
-    }
+    },
+    select
   })
   return user
 }
@@ -34,7 +65,8 @@ async function updateUser (user: User): Promise<User> {
     },
     data: {
       ...user
-    }
+    },
+    select
   })
   return updatedUser
 }
@@ -49,8 +81,8 @@ async function deleteUser (id: number): Promise<User> {
 }
 
 async function getAllUsers (): Promise<User[]> {
-  const users = await prisma.user.findMany()
+  const users = await prisma.user.findMany({ select })
   return users
 }
 
-export { getUserById, getUserByEmail, createUser, updateUser, deleteUser, getAllUsers }
+export { getUserById, getUserByEmail, createUser, updateUser, deleteUser, getAllUsers, getUserByUsernameAndPassword }
