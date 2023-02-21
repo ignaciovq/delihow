@@ -3,39 +3,37 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import cloudinary from 'cloudinary'
 import { createRecipe, getAllRecipes } from '@/services/recipe.service'
+
 cloudinary.v2.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME
 })
 
-export default async function handler (
+export default function handler (
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<{}>
 ) {
-  switch (req.method) {
-    case 'GET':
-      await onGet(req, res)
-      break
-    case 'POST':
-      await onPost(req, res)
-      break
+  if (req.method === 'GET') {
+    onGet().then(({ status, response }) => res.status(status).json(response))
+  } else if (req.method === 'POST') {
+    onPost(req.body).then(({ status, response }) => res.status(status).json(response))
   }
 }
 
-async function onGet (req: NextApiRequest, res: NextApiResponse) {
+async function onGet () {
   const recipes = await getAllRecipes()
-  res.status(200).json(recipes)
+  return { status: 200, response: recipes }
 }
 
-async function onPost (req: NextApiRequest, res: NextApiResponse) { // TODO: validate image before uploading to cloudinary ✅
+async function onPost (body) { // TODO: validate image before uploading to cloudinary ✅
   const magic = {
     jpg: 'ffd8ffe0',
     png: '89504e47',
     gif: '47494638'
   }
   let image
-  const { title, description, prepTime, complexity, steps, ingredients, img } = req.body
+  const { title, description, prepTime, complexity, steps, ingredients, img } = body
   if (img && img.length > 0 && img instanceof Array) {
     image = await Promise.all(
       img.map(async (i) => {
@@ -48,13 +46,40 @@ async function onPost (req: NextApiRequest, res: NextApiResponse) { // TODO: val
       })
     )
   } else {
-    res.status(400).json({ message: 'Image is required' })
-    return
+    return { status: 400, response: 'Image is required' }
   }
   if (image.some((i) => !i || !i.secure_url)) {
-    res.status(400).json({ message: 'File is not an image' })
-    return
+    return { status: 400, response: 'File is not an image' }
   }
+
+  const possibleTags = ['Carne', 'Pescado', 'Verdura', 'Postre', 'Mariscos', 'Pastas', 'Cereales', 'Lacteos', 'Frutas']
+  const aiReq = await fetch('https://api.openai.com/v1/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
+    },
+    body: JSON.stringify({
+      model: 'text-davinci-003',
+      prompt: `Tags: ${possibleTags.join(', ')}\n\n-Identificar las Tag según los siguientes Ingredientes. \n-Solo Tags mencionadas con anterioridad. \n\nIngredientes: ${ingredients}\n\nTags encontradas:`,
+      temperature: 0,
+      max_tokens: 200,
+      top_p: 1,
+      frequency_penalty: 0,
+      presence_penalty: 0
+    })
+  })
+  const aiTagsJson = (await aiReq.json()).choices[0].text
+  const tags = possibleTags.filter((tag) => aiTagsJson.includes(tag))
+  const isVegetarian = !tags.some((tag) => tag === 'Carne' || tag === 'Pescado' || tag === 'Mariscos')
+  const isVegan = isVegetarian ? !tags.some((tag) => tag === 'Lacteos') : false
+  const fullTags = isVegan
+    ? [...tags, 'Vegano', 'Vegetariano']
+    : isVegetarian
+      ? [...tags, 'Vegetariano']
+      : tags
+
+  console.log({ fullTags })
   const ingre = ingredients.replace(' y ', ',').split(',').map((i: string) => i.trim())
   const recipe = await createRecipe({
     title,
@@ -64,8 +89,8 @@ async function onPost (req: NextApiRequest, res: NextApiResponse) { // TODO: val
     steps,
     ingredients: ingre,
     images: image.map((i) => i.secure_url),
-    tags: ['tag1', 'tag2', 'tag3'],
+    tags: fullTags,
     creatorId: 1
   })
-  res.status(200).json(recipe)
+  return { status: 200, response: recipe }
 }
