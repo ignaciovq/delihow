@@ -1,0 +1,62 @@
+.round{
+    border-radius: 50%;
+}
+
+.button{
+    color: inherit;
+    background-color: inherit;
+    font: inherit;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+#sessionMenuButton {
+    position: relative;
+}
+
+#sessionMenuButton > button {
+    display: inline-flex;
+    align-items: center;
+}
+
+#sessionMenuButton image {
+    object-fit: contain;
+}
+
+.dropdownMenu {
+    position: absolute;
+    top: 5.65vh;
+    right: 0;
+    background-color: var(--menu-color);
+    border-radius: 10px;
+    z-index: 6;
+    overflow: clip;
+}
+
+.dropdownMenu > ul {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--menus-font-size);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.dropdownMenu li{
+    text-decoration: none;
+    color: inherit;
+    padding: .5rem 1rem;
+    cursor: pointer;
+}
+
+.dropdownMenu li:hover{
+    background-color: var(--highlight-primary-color);
+}
+
+.dropdownMenu a{
+    text-decoration: none;
+    color: inherit;
+}

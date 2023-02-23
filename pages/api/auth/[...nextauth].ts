@@ -1,12 +1,15 @@
 // @ts-nocheck
-import NextAuth from 'next-auth'
+import NextAuth, { AuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { prisma } from '@/prisma/prismaClient'
+import { getUserByEmailAndPassword } from '@/services/user.service'
+import { createHash } from 'crypto'
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
+  session: { strategy: 'jwt' },
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
@@ -15,26 +18,40 @@ export const authOptions = {
     CredentialsProvider({
       name: 'Credentials',
       credentials: {
-        username: { label: 'Username', type: 'text' },
+        email: { label: 'Email', type: 'text' },
         password: { label: 'Password', type: 'password' }
       },
       async authorize (credentials, req) {
-        const res = await fetch('/your/endpoint', {
-          method: 'POST',
-          body: JSON.stringify(credentials),
-          headers: { 'Content-Type': 'application/json' }
-        })
-        const user = await res.json()
+        const { email, password } = credentials
 
-        // If no error and we have user data, return it
-        if (res.ok && user) {
-          return user
+        if (!email || !password) {
+          return null
         }
+        if (email?.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/) === null) {
+          return null
+        }
+
+        const passwordHash = createHash('sha256').update(password).digest('hex')
+        const user = await getUserByEmailAndPassword(email, passwordHash)
+        if (user) return user
+
         // Return null if user data could not be retrieved
         return null
       }
     })
-  ]
+  ],
+  callbacks: {
+    async jwt ({ token, user }) {
+      if (user) {
+        token.user = user
+      }
+      return Promise.resolve(token)
+    },
+    async session ({ session, token }) {
+      session.user = token.user
+      return Promise.resolve(session)
+    }
+  }
 }
 
 export default NextAuth(authOptions)

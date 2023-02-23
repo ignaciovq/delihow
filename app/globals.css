@@ -1,3 +1,13 @@
+:root{
+    --primary-color: #714451;
+    --menu-color: #643838;
+    --darker-primary-color: #551616;
+    --highlight-primary-color: #7C3535;
+    --light-background-color: #FFF4E6;
+    --base-font-size: clamp(.625rem, 1vw, 1rem);
+    --menus-font-size: clamp(.875rem, 1.25vw, 1.15rem);
+}
+
 *{
     margin: 0;
     padding: 0;
@@ -14,5 +24,5 @@ main{
     margin-top: 7.5vh;
 }
 body{
-    background-color: #223;
+    background-color: var(--light-background-color);
 }

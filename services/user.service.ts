@@ -1,6 +1,6 @@
 import { prisma } from '@/prisma/prismaClient'
 
-type User = {
+export type User = {
     id: number,
     username: string | null,
     password: string | null,
@@ -18,10 +18,10 @@ const select = {
   image: true
 
 }
-async function getUserByUsernameAndPassword (username: string, password: string): Promise<User | null> {
+async function getUserByEmailAndPassword (email: string, password: string): Promise<User | null> {
   const user = await prisma.user.findUnique({
     where: {
-      username
+      email
     },
     select
   })
@@ -49,7 +49,7 @@ async function getUserByEmail (email: string): Promise<User | null> {
   return user
 }
 
-async function createUser (user: User): Promise<User> {
+async function createUser (user: {email: string, name:string, password: string}): Promise<User> {
   const newUser = await prisma.user.create({
     data: {
       ...user
@@ -85,4 +85,4 @@ async function getAllUsers (): Promise<User[]> {
   return users
 }
 
-export { getUserById, getUserByEmail, createUser, updateUser, deleteUser, getAllUsers, getUserByUsernameAndPassword }
+export { getUserById, getUserByEmail, createUser, updateUser, deleteUser, getAllUsers, getUserByEmailAndPassword }

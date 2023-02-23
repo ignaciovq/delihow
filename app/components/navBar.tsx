@@ -1,49 +1,30 @@
 import styles from './navbar.module.css'
-import { categories } from '@/data/categories'
 import Image from 'next/image'
 import Link from 'next/link'
 // eslint-disable-next-line camelcase
-import { Source_Serif_Pro, Poppins } from '@next/font/google'
+import { Space_Grotesk } from '@next/font/google'
+import SessionMenu from '@/app/components/sessionMenu'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
-const sourceSerifPro = Source_Serif_Pro({
+const spaceGrotesk = Space_Grotesk({
   weight: '400',
   subsets: ['latin']
 })
 
-const poppins = Poppins({
-  weight: '400',
-  subsets: ['latin']
-})
-
-export const NavBar = () => {
+export default async function NavBar () {
+  const session = await getServerSession(authOptions)
+  console.log(session)
   return (
     <nav id={styles.navbar} className='flex_row'>
-      <div className={styles.main_section}>
-        <Link href='/' className={styles.logo}>
-          <Image src='logo.svg' alt='Delihow Logo' width={40} height={40} />
-          <h1 className={sourceSerifPro.className}>delihow</h1>
-        </Link>
-        <div className={styles.search}>
-          <input type='search' placeholder='Encuentra tus recetas!' /><button>Buscar</button>
-        </div>
+      <Link href='/' className={`${styles.logo} flex_row`}>
+        <Image src='logo.svg' alt='Delihow Logo' width={40} height={40} />
+        <h1 className={spaceGrotesk.className}>delihow</h1>
+      </Link>
+      <div className={styles.search}>
+        <input type='search' placeholder='Encuentra tus recetas!' /><button>Buscar</button>
       </div>
-      <div className={styles.discover}>
-        <span>DESCUBRE</span>
-        <div className={`${styles.discover_menu} ${poppins.className}`}>
-          {
-            categories.map((category) => {
-              return (
-                <Link key={category.id} href={category.href} className='flex_row'>
-                  <Image src={category.icon.src} alt={category.icon.alt} width={20} height={20} />
-                  <span>{category.label}</span>
-                </Link>
-              )
-            })
-          }
-        </div>
-      </div>
+      <SessionMenu session={session} />
     </nav>
   )
 }
-
-export default NavBar

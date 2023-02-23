@@ -1,27 +1,28 @@
 export const categories = [
   {
     id: 1,
-    label: 'Postres',
-    href: '/',
-    icon: { src: '/images/dessert.svg', alt: 'Cake icon' }
-  },
-  {
-    id: 2,
-    label: 'Bebidas',
-    href: '/',
-    icon: { src: '/images/drinks.svg', alt: 'Drinks icon' }
-  },
-  {
-    id: 3,
-    label: 'Aperitivos',
-    href: '/',
-    icon: { src: '/images/entrees.svg', alt: 'Entrees icon' }
-  },
-  {
-    id: 4,
     label: 'Carnes',
     href: '/',
     icon: { src: '/images/meat.svg', alt: 'Meat icon' }
+  },
+
+  {
+    id: 2,
+    label: 'Lacteos',
+    href: '/',
+    icon: { src: '/images/milk.svg', alt: 'Milk icon' }
+  },
+  {
+    id: 3,
+    label: 'Cereales',
+    href: '/',
+    icon: { src: '/images/cereal.svg', alt: 'Entrees icon' }
+  },
+  {
+    id: 4,
+    label: 'Postres',
+    href: '/',
+    icon: { src: '/images/dessert.svg', alt: 'Ice-cream icon' }
   },
   {
     id: 5,
@@ -31,20 +32,26 @@ export const categories = [
   },
   {
     id: 6,
-    label: 'Ensalada',
+    label: 'Verdura',
     href: '/',
-    icon: { src: '/images/Salad.svg', alt: 'Salad icon' }
+    icon: { src: '/images/salad.svg', alt: 'Salad icon' }
   },
   {
     id: 7,
-    label: 'Pescado y Mariscos',
+    label: 'Pescado',
     href: '/',
-    icon: { src: '/images/seafood.svg', alt: 'Seafood icon' }
+    icon: { src: '/images/fish.svg', alt: 'Fish icon' }
   },
   {
     id: 8,
-    label: 'Sopas y Guisos',
+    label: 'Mariscos',
     href: '/',
-    icon: { src: '/images/soupandstews.svg', alt: 'Soup icon' }
+    icon: { src: '/images/shrimp.svg', alt: 'Seafood icon' }
+  },
+  {
+    id: 9,
+    label: 'Frutas',
+    href: '/',
+    icon: { src: '/images/fruit.svg', alt: 'Fruit icon' }
   }
 ]
