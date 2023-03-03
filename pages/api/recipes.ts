@@ -3,6 +3,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import cloudinary from 'cloudinary'
 import { createRecipe, getAllRecipes } from '@/services/recipe.service'
+import validateImage from '@/validation/validateImage'
 
 cloudinary.v2.config({
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -30,19 +31,13 @@ async function onGet () {
 }
 
 async function onPost (body) { // TODO: validate image before uploading to cloudinary ✅
-  const magic = {
-    jpg: 'ffd8ffe0',
-    png: '89504e47',
-    gif: '47494638'
-  }
   let image
   const { title, description, prepTime, complexity, steps, ingredients, img } = body
   if (img && img.length > 0 && img instanceof Array) {
     image = await Promise.all(
       img.map(async (i) => {
-        const base64ToHex = (i: string) => Buffer.from(i.split('base64,')[1], 'base64').toString('hex')
-        const first4Bytes = base64ToHex(i).slice(0, 8)
-        if (first4Bytes !== magic.jpg && first4Bytes !== magic.png && first4Bytes !== magic.gif) {
+        const imageIsValid = validateImage(i)
+        if (!imageIsValid) {
           return
         }
         return await cloudinary.v2.uploader.upload(i)

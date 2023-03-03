@@ -1,7 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import type { User } from '@/services/user.service'
+import cloudinary from 'cloudinary'
 import { createUser, getUserByEmail } from '@/services/user.service'
-import { createHash } from 'crypto'
+import validateImage from '@/validation/validateImage'
+
+cloudinary.v2.config({
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME
+})
 
 export default function handler (
   req: NextApiRequest,
@@ -11,28 +18,50 @@ export default function handler (
     return res.status(405).send({ error: 'This endpoint can only handle POST requests' })
   }
 
-  const { email, name, password } = req.body
+  handlePost(req.body)
+    .then(({ status, response }) => {
+      console.log(response)
+      return res.status(status).json(response)
+    })
+}
+
+async function handlePost (body: NextApiRequest['body']) {
+  const { email, name, password, picture } = body
+  const defaultImage = '/images/default_pic.png'
   let user: User | null = null
+  let image: string
+  console.log(body)
 
   if (!email || !password || !name) {
-    return res.status(400).send({ error: 'Email and password are required' })
+    return { status: 400, response: { error: 'Email, name and password are required fields' } }
   }
   if (email?.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/) === null) {
-    return res.status(400).send({ error: 'Email is not valid' })
+    return { status: 400, response: { error: 'Email is not valid' } }
   }
-  getUserByEmail(email).then((userData) => {
-    if (userData) {
-      return res.status(400).send({ error: 'Email already exists' })
+  if (await getUserByEmail(email) !== null) {
+    return { status: 400, response: { error: 'Email is already registered' } }
+  }
+
+  if (picture) {
+    const imageIsValid = validateImage(picture)
+    const invalidFileResponse = { status: 400, response: { error: 'File is not an image' } }
+    if (!imageIsValid) {
+      return invalidFileResponse
     }
-  })
+    image = (await cloudinary.v2.uploader.upload(picture))?.secure_url
+    if (!image) {
+      return invalidFileResponse
+    }
+  } else {
+    image = defaultImage
+  }
 
-  const passwordHash = createHash('sha256').update(password).digest('hex')
-
-  createUser({ email, password: passwordHash, name }).then((userData) => {
-    user = userData
-    return res.status(200).send({ message: 'User created successfully', userData: user })
-  }).catch((error) => {
+  try {
+    user = await createUser({ email, password, name, image })
+    return { status: 200, response: { message: 'User created successfully', userData: user } }
+  } catch (error) {
+    console.log(error)
     const { message } = error as Error
-    return res.status(500).send({ error: 'Something went wrong: ' + message })
-  })
+    return { status: 500, response: { error: 'Something went wrong: ' + message } }
+  }
 }

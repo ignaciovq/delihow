@@ -13,6 +13,7 @@ export default function RootLayout ({
       <head />
       <body>
         <AuthProvider>
+          {/* @ts-ignore */}
           <NavBar />
           <main>
             {children}

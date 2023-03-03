@@ -14,7 +14,6 @@ const spaceGrotesk = Space_Grotesk({
 
 export default async function NavBar () {
   const session = await getServerSession(authOptions)
-  console.log(session)
   return (
     <nav id={styles.navbar} className='flex_row'>
       <Link href='/' className={`${styles.logo} flex_row`}>

@@ -49,7 +49,7 @@ async function getUserByEmail (email: string): Promise<User | null> {
   return user
 }
 
-async function createUser (user: {email: string, name:string, password: string}): Promise<User> {
+async function createUser (user: {email: string, name:string, password: string, image: string}): Promise<User> {
   const newUser = await prisma.user.create({
     data: {
       ...user
