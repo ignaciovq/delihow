@@ -1,0 +1,122 @@
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+}
+
+#recipeGrid {
+    gap: 2.5rem
+}
+
+.card {
+    height: fit-content;
+    text-decoration: none;
+    transition: scale .25s ease-in-out;
+    border-radius: .5rem;
+    cursor: pointer;
+    outline: none;
+}
+
+#cardContent {
+    color: var(--dark-theme-font-color);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    border-radius: .5rem;
+    transition: all .25s ease-in-out;
+}
+
+.title {
+    padding: .75rem 1rem;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--menu-color);
+    border-radius: 0 0 .5rem .5rem;
+}
+
+.title > h3 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.image {
+    display: flex;
+    flex-direction: column;
+    background-color: #252540;
+    border-radius: .5rem .5rem 0 0;
+}
+
+.image > img {
+    width: 100%;
+    object-fit: cover;
+    border-radius: .5rem .5rem 0 0;
+}
+
+.prepTime, .tags {
+    opacity: 0;
+    height: 0;
+}
+
+.prepTime {
+    color: inherit;
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: .25rem;
+}
+
+.tags {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: .2rem;
+}
+
+.tags > span {
+    padding: .25rem .5rem;
+    border-radius: .5rem;
+    background-color: var(--primary-color);
+    font-size: .75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card:hover {
+    scale: 1.25;
+    border: unset;
+    position: relative;
+}
+
+.card:hover #cardContent {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    animation: rise .25s 0s 1 forwards ease-out;
+}
+
+@keyframes rise {
+    from {
+        top: 0;
+    }
+    to {
+        top: -2.5vh;
+    }
+}
+
+.card:hover .title {
+    gap: .35rem;
+}
+
+.card:hover .title > h3 {
+    white-space: normal;
+}
+
+.card:hover .prepTime, .card:hover .tags {
+    opacity: 1;
+    height: auto;
+}
+
+

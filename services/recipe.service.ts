@@ -1,7 +1,7 @@
 import { prisma } from '@/prisma/prismaClient'
 import type { Recipe } from '.prisma/client'
 
-type fullRecipe = {
+export type fullRecipe = {
     id?: number,
     title: string,
     description: string,
@@ -19,6 +19,15 @@ const include = {
   Ingredients: true,
   Tags: true,
   Rating: true
+}
+
+async function getRecipesByPage (page: number, limit: number): Promise<Recipe[]> {
+  const recipes = await prisma.recipe.findMany({
+    include,
+    skip: (page - 1) * limit,
+    take: limit
+  })
+  return recipes
 }
 
 async function getRecipesOwnedByUserId (id: number): Promise<Recipe[]> {
@@ -286,5 +295,6 @@ export {
   createRecipe,
   updateRecipe,
   deleteRecipe,
-  getAllRecipes
+  getAllRecipes,
+  getRecipesByPage
 }

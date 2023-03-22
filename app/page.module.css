@@ -1,0 +1,6 @@
+.container {
+    padding: 2.5rem 5rem;
+    color: var(--dark-theme-font-color);
+    font-size: var(--base-font-size);
+    height: 92.5vh;
+}

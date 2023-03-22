@@ -1,7 +1,8 @@
 .container{
-   composes: container from '../recipe/page.module.css';
+   composes: container from '../recipe/new/page.module.css';
    color: white;
    margin: 5% auto 0 auto;
+    background-color: var(--dark-background-color);
 }
 
 .container > form {

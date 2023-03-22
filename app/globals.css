@@ -5,9 +5,11 @@
     --highlight-primary-color: #7C3535;
     --light-background-color: #FFF4E6;
     --dark-background-color: #223;
-    --base-font-size: clamp(.625rem, 1vw, 1rem);
-    --menus-font-size: clamp(.875rem, 1.25vw, 1.15rem);
-    --big-font-size: clamp(1.25rem, 1.5vw, 2rem);
+    --dark-theme-font-color: white;
+    --base-font-size: clamp(.625rem, 1.2vw, 1.15rem);
+    --menus-font-size: clamp(.875rem, 1.5vw, 1.5rem);
+    --big-font-size: clamp(1.25rem, 2.3vw, 2.5rem);
+
 }
 
 *{
@@ -18,14 +20,22 @@
 
 .flex_row{
     display: flex;
-    flex-direction: row;
     gap: .2rem;
     align-items: center;
 }
+
+.flex_column{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
 main{
     margin-top: 7.5vh;
 }
 
-body{
+html{
     background-color: var(--dark-background-color);
+    background-image: url(https://images.unsplash.com/photo-1543353071-873f17a7a088?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80);
+    background-size: cover;
 }

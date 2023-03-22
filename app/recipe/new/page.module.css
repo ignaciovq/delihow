@@ -8,6 +8,7 @@
     padding: 2rem;
     border-radius: 12px;
     box-shadow: 0 0 10px 0 #000;
+    background-color: var(--dark-background-color);
 }
 
 .container > div:not(.stepsContainer) {

@@ -17,7 +17,7 @@ export default async function NavBar () {
   return (
     <nav id={styles.navbar} className='flex_row'>
       <Link href='/' className={`${styles.logo} flex_row`}>
-        <Image src='logo.svg' alt='Delihow Logo' width={40} height={40} />
+        <Image src='/logo.svg' alt='Delihow Logo' width={40} height={40} />
         <h1 className={spaceGrotesk.className}>delihow</h1>
       </Link>
       <div className={styles.search}>
