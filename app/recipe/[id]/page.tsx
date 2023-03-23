@@ -1,6 +1,4 @@
-import styles from './page.module.css'
 import { getUserById } from '@/services/user.service'
-import Image from 'next/image'
 import Link from 'next/link'
 import parseTime from '@/app/recipe/[id]/utils/parseTime'
 import mapComplexity from '@/app/recipe/[id]/utils/mapComplexity'
@@ -8,6 +6,7 @@ import { DM_Sans } from '@next/font/google'
 import TagList from '@/app/recipe/[id]/components/tagList'
 import Instructions from '@/app/recipe/[id]/components/instructions'
 import ImageViewer from '@/app/recipe/[id]/components/imageViewer'
+import styles from './page.module.css'
 
 const font = DM_Sans({
   weight: '400',
@@ -26,7 +25,7 @@ export default async function RecipePage ({ params }:{params: { id: string }}) {
     steps: ['Preparar masa para pizza', 'Hornear la masa por unos minutos', 'Agregar salsa, tomates, mozzarella y albahaca', 'Hornear otra vez hasta que esté dorado'].join('\n'),
     prepTime: 60,
     ingredients: ['Harina', 'Levadura', 'Agua', 'Sal', 'Aceite de Oliva', 'Salsa de Tomate', 'Mozzarella', 'Albahaca Fresca'],
-    images: ['https://images.unsplash.com/photo-1600028068383-ea11a7a101f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80'],
+    images: ['https://images.unsplash.com/photo-1600028068383-ea11a7a101f3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=774&q=80', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQuWiqo7tPIr_L1ButZdjF1W08rjrSQDR1B0A&usqp=CAU'],
     tags: ['pizza'],
     creatorId: 15
   }

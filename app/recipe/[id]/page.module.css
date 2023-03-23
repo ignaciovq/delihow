@@ -1,7 +1,9 @@
 .container {
     composes: container from '../../page.module.css';
     align-items: center;
-
+    background-image: url(https://images.unsplash.com/photo-1452251889946-8ff5ea7b27ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mzh8fGNvb2tpbmd8ZW58MHx8MHx8&auto=format&fit=crop&w=800&q=60);
+    background-size: cover;
+    height: 100%;
 }
 
 #content {
@@ -25,11 +27,11 @@
 }
 
 .title {
-    font-size: var(--big-font-size)
+    font-size: var(--big-font-size);
 }
 
 .title + h2 {
-    font-size: var(--menus-font-size)
+    font-size: var(--menus-font-size);
 }
 
 .title + h2 > a {
@@ -78,16 +80,15 @@
     height: 100%;
 }
 
-.imageContainer{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 32vh;
+.imageContainer {
+    width: 100%;
+    height: 40vh;
+    border-radius: .5rem;
 }
 
-.imageContainer > img {
+.imageItem {
     width: 100%;
-    height: 100%;
+    height: 40vh;
     object-fit: cover;
     border-radius: .5rem;
 }

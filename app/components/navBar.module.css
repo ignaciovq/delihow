@@ -16,7 +16,7 @@
 .logo{
     transition: transform .25s;
     text-decoration: none;
-    color: inherit;
+    color: var(--dark-theme-font-color);
     gap: 0.5625rem;
 }
 

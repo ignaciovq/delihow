@@ -1,7 +1,8 @@
 'use client'
 import styles from '../page.module.css'
 import Image from 'next/image'
-import { CCarousel, CCarouselItem, CImage } from '@coreui/react'
+import { Splide, SplideSlide } from '@splidejs/react-splide'
+import '@splidejs/react-splide/css'
 
 const ImageViewer = ({ images }:{images: string[]}) => {
   const { imageContainer, imageItem } = styles
@@ -9,13 +10,20 @@ const ImageViewer = ({ images }:{images: string[]}) => {
     <section className={imageContainer}>
       {images.length === 1 && (<Image src={images[0]} alt='Foto receta' width={100} height={100} />)}
       {images.length > 1 && (
-        <CCarousel controls indicators>
+        <Splide
+          options={{
+            rewind: true,
+            lazyLoad: true,
+            preloadPages: 1
+          }}
+          aria-label='Finished dish images'
+        >
           {images.map((image, index) => (
-            <CCarouselItem key={image}>
-              <CImage className={imageItem} src={image} alt={`slide${index}`} />
-            </CCarouselItem>
+            <SplideSlide key={image}>
+              <Image className={imageItem} src={image} alt={`slide ${index}`} width={1000} height={1000} />
+            </SplideSlide>
           ))}
-        </CCarousel>
+        </Splide>
       )}
     </section>
   )
