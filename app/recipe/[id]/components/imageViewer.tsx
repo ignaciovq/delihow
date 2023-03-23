@@ -16,7 +16,7 @@ const ImageViewer = ({ images }:{images: string[]}) => {
             lazyLoad: true,
             preloadPages: 1
           }}
-          aria-label='Finished dish images'
+          aria-label='Fotos plato terminado'
         >
           {images.map((image, index) => (
             <SplideSlide key={image}>
