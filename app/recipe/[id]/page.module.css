@@ -108,6 +108,97 @@
     gap: 1rem;
 }
 
+#commentSection {
+    width: 100%;
+    background-color: var(--dark-background-color);
+    border-radius: .5rem;
+    padding: 2rem;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    gap: 2rem;
+}
+
+.commentContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+#CommentList {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.comment {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .5rem;
+}
+
+.userInfo {
+    display: inherit;
+    flex-direction: column;
+    align-items: center;
+    gap: .5rem;
+    flex-grow: 0.05;
+}
+
+.userInfo img {
+    width: 3rem;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+#newComment > form {
+    flex-grow: 0.4;
+    position: relative;
+}
+
+.commentInput > textarea {
+    resize: none;
+    width: 100%;
+    aspect-ratio: 8/1;
+    padding: .5rem;
+    border-radius: .3rem;
+    outline: transparent;
+}
+
+#commentButtonContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+.commentButton {
+    composes: primaryButton from '../../page.module.css';
+    outline: transparent;
+    position: absolute;
+    bottom: .65rem;
+    right: .25rem;
+}
+
+#commentList {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.commentBody{
+    display: flex;
+    flex-direction: column;
+    gap: .75rem;
+}
+
+.commentDate {
+    font-size: var(--small-font-size);
+}
+
+
 
 
 

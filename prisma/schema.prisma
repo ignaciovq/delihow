@@ -43,19 +43,22 @@ model User {
   History        History?
   CreatedRecipes Recipe[]
   Favorites      FavoriteRecipes[]
+  Comments       Comment[]
+  Ratings        Rating[]
+  MealPlans      MealPlan[]
 }
 
 model Recipe {
   id             Int               @id @default(autoincrement())
-  title          String            @db.VarChar(50)
-  description    String            @db.VarChar(200)
+  title          String            @db.VarChar(100)
+  description    String?           @db.VarChar(500)
   complexity     Int
   prepTime       Int
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
   Creator        User              @relation(fields: [userId], references: [id])
   userId         Int
-  Steps          String
+  Steps          String            @db.VarChar(3200)
   Ingredients    Ingredient[]
   Comments       Comment[]
   Rating         Rating[]
@@ -63,6 +66,7 @@ model Recipe {
   Image          Image[]
   FavoriteOfUser FavoriteRecipes[]
   RecipeHistory  RecipeHistory[]
+  MealPlan       Meals[]
 }
 
 model FavoriteRecipes {
@@ -79,10 +83,14 @@ model Tag {
 }
 
 model Comment {
-  id       Int    @id @default(autoincrement())
-  text     String @db.VarChar(255)
-  Recipe   Recipe @relation(fields: [recipeId], references: [id])
-  recipeId Int
+  id        Int      @id @default(autoincrement())
+  text      String   @db.VarChar(255)
+  Recipe    Recipe   @relation(fields: [recipeId], references: [id])
+  recipeId  Int
+  User      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Rating {
@@ -90,11 +98,13 @@ model Rating {
   value    Int
   Recipe   Recipe @relation(fields: [recipeId], references: [id])
   recipeId Int
+  User     User   @relation(fields: [userId], references: [id])
+  userId   Int
 }
 
 model Ingredient {
   id       Int     @id @default(autoincrement())
-  name     String  @unique @db.VarChar(30)
+  name     String  @unique @db.VarChar(50)
   Recipe   Recipe? @relation(fields: [recipeId], references: [id])
   recipeId Int?
 }
@@ -119,4 +129,29 @@ model Image {
   url      String @db.VarChar(100)
   Recipe   Recipe @relation(fields: [recipeId], references: [id])
   recipeId Int
+}
+
+model MealPlan {
+  id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  User      User      @relation(fields: [userId], references: [id])
+  userId    Int
+  weekday   Weekday[]
+}
+
+model Weekday {
+  id         Int      @id @default(autoincrement())
+  MealPlan   MealPlan @relation(fields: [mealPlanId], references: [id])
+  mealPlanId Int
+  day        String   @db.VarChar(10)
+  Meals      Meals[]
+}
+
+model Meals {
+  id        Int      @id @default(autoincrement())
+  Weekday   Weekday  @relation(fields: [weekdayId], references: [id])
+  weekdayId Int
+  name      String   @db.VarChar(50)
+  Recipe    Recipe[]
 }

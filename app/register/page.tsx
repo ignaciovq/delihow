@@ -4,14 +4,14 @@ import { object, string } from 'yup'
 import { createHash } from 'crypto'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useState } from 'react'
+import { useState, type Dispatch, type SetStateAction } from 'react'
 import { FilePond, registerPlugin } from 'react-filepond'
 import FilePondPluginImageExifOrientation from 'filepond-plugin-image-exif-orientation'
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
 import 'filepond/dist/filepond.min.css'
 import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 import isValidImage from '@/app/register/isValidImage'
-import { FilePondFile } from 'filepond'
+import { ActualFileObject, FilePondFile } from 'filepond'
 import readFileAsync from '@/app/register/readFileAsync'
 
 // Registering FilePond plugins
@@ -48,7 +48,8 @@ const initialValues = {
 export default function Registration () {
   const { container, registrationForm, formField, fileInput, errorField } = styles
   // State for the filepond component
-  const [pictureFiles, setPictureFiles] = useState(initialValues.picture)
+  // @ts-ignore
+  const [pictureFiles, setPictureFiles]:[pictureFiles: string[], setPictureFiles: Dispatch<SetStateAction<FilePondFile[]>>] = useState([])
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     defaultValues: initialValues,
@@ -59,7 +60,7 @@ export default function Registration () {
     let picture = ''
 
     const { confirmPassword, password, ...otherValues } = data
-    const pictureFile = (pictureFiles[0] as FilePondFile)?.file as File
+    const pictureFile = (pictureFiles[0] as unknown as FilePondFile)?.file as File
 
     const passwordHash = createHash('sha256').update(password).digest('hex')
 

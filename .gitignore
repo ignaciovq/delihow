@@ -27,6 +27,8 @@ yarn-error.log*
 
 # local env files
 .env
+.env.development
+.env.production
 
 # vercel
 .vercel
@@ -37,9 +39,10 @@ next-env.d.ts
 pnpm-lock.yaml
 /.vscode
 /.idea
-.env
-.env.development
-.env.production
 
 #prisma
 prisma/generated
+
+#dummy and mock dev data
+data/dummyRecipes.json
+populateDB.ts

@@ -11,14 +11,17 @@ export type fullRecipe = {
     prepTime: number,
     images: string[],
     ingredients: string[],
-    tags: string[]
-}
+    tags: string[],
+    rating?: number[]
+  }
+
 const include = {
   Creator: true,
   Image: true,
   Ingredients: true,
   Tags: true,
-  Rating: true
+  Rating: true,
+  Comments: true
 }
 
 async function getRecipesByPage (page: number, limit: number): Promise<Recipe[]> {

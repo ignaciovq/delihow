@@ -2,9 +2,9 @@
 import type { Session } from 'next-auth'
 import styles from './sessionMenu.module.css'
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import menuOptions from '@/data/menuOptions'
-import { signIn, signOut } from 'next-auth/react'
+import { signIn, signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { Poppins } from '@next/font/google'
 
@@ -13,31 +13,31 @@ const poppins = Poppins({
   subsets: ['latin']
 })
 
-export default function SessionMenu ({ session }:{session: Session | null}) {
+export default function SessionMenu () {
   const [menuIsOpen, setMenuIsOpen] = useState<boolean>(false)
   const { sessionMenuButton, round, button, dropdownMenu } = styles
   const { loginOptions, authenticatedOptions } = menuOptions
-  const { user } = session || {}
+  const { data: session, status } = useSession()
 
-  const options = session ? authenticatedOptions : loginOptions
+  const options = status === 'authenticated' ? authenticatedOptions : loginOptions
 
   return (
     <>
       <div id={sessionMenuButton}>
         <button className={`${round} ${button}`} onClick={() => setMenuIsOpen((prev) => !prev)}>
-          <Image className={round} src={user?.image || '/images/default_pic.png'} alt='Menu' width={40} height={40} />
+          <Image className={round} src={session?.user?.image || '/images/default_pic.png'} alt='Menu' width={40} height={40} />
         </button>
         {menuIsOpen && (
           <div className={`${dropdownMenu}`}>
             <ul className={`${poppins.className} flex_column`}>
               <>
-                {session || (
+                {status === 'unauthenticated' && (
                   <li key='login'><button className={`${button}`} onClick={async () => await signIn()}>Iniciar sesión</button></li>
                 )}
                 {options.map((option) => {
                   return <li key={option.label}><Link href={option.href}>{option.label}</Link></li>
                 })}
-                {session && (
+                {status === 'authenticated' && (
                   <li key='logout'><button className={`${button}`} onClick={async () => await signOut()}>Cerrar sesión</button></li>
                 )}
               </>

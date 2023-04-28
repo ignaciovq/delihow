@@ -4,8 +4,6 @@ import Link from 'next/link'
 // eslint-disable-next-line camelcase
 import { Space_Grotesk } from '@next/font/google'
 import SessionMenu from '@/app/components/sessionMenu'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/pages/api/auth/[...nextauth]'
 
 const spaceGrotesk = Space_Grotesk({
   weight: '400',
@@ -13,7 +11,6 @@ const spaceGrotesk = Space_Grotesk({
 })
 
 export default async function NavBar () {
-  const session = await getServerSession(authOptions)
   return (
     <nav id={styles.navbar} className='flex_row'>
       <Link href='/' className={`${styles.logo} flex_row`}>
@@ -23,7 +20,7 @@ export default async function NavBar () {
       <div className={styles.search}>
         <input type='search' placeholder='Encuentra tus recetas!' /><button>Buscar</button>
       </div>
-      <SessionMenu session={session} />
+      <SessionMenu />
     </nav>
   )
 }

@@ -8,7 +8,7 @@ const ImageViewer = ({ images }:{images: string[]}) => {
   const { imageContainer, imageItem } = styles
   return (
     <section className={imageContainer}>
-      {images.length === 1 && (<Image src={images[0]} alt='Foto receta' width={100} height={100} />)}
+      {images.length === 1 && (<Image className={imageItem} src={images[0]} alt='Foto receta' width={100} height={100} />)}
       {images.length > 1 && (
         <Splide
           options={{

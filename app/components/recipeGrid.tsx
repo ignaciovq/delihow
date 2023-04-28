@@ -1,7 +1,6 @@
-import { fullRecipe } from '@/services/recipe.service'
-import RecipeCard from '@/app/components/recipeCard'
+import RecipeCard, { DisplayRecipe } from '@/app/components/recipeCard'
 import styles from './recipe.module.css'
-const RecipeGrid = ({ recipeList }:{recipeList: fullRecipe[]}) => {
+const RecipeGrid = ({ recipeList }:{recipeList: DisplayRecipe[]}) => {
   const { grid, recipeGrid } = styles
   return (
     <div id={recipeGrid} className={grid}>

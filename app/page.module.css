@@ -3,3 +3,13 @@
     color: var(--dark-theme-font-color);
     font-size: var(--base-font-size);
 }
+
+.primaryButton {
+    background-color: var(--primary-color);
+    color: var(--dark-theme-font-color);
+    border: none;
+    border-radius: .75rem;
+    padding: .35rem .55rem;
+    font-size: var(--base-font-size);
+    cursor: pointer;
+}
